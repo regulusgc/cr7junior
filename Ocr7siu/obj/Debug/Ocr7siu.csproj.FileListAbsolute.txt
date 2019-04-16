@@ -88,3 +88,5 @@ C:\Users\Regulus\documents\visual studio 2017\Projects\Ocr7siu\Ocr7siu\bin\Micro
 C:\Users\Regulus\documents\visual studio 2017\Projects\Ocr7siu\Ocr7siu\bin\Microsoft.WindowsAzure.Storage.xml
 C:\Users\Regulus\documents\visual studio 2017\Projects\Ocr7siu\Ocr7siu\bin\Microsoft.WindowsAzure.Configuration.dll
 C:\Users\Regulus\documents\visual studio 2017\Projects\Ocr7siu\Ocr7siu\bin\Microsoft.WindowsAzure.Configuration.xml
+C:\Users\Regulus\documents\visual studio 2017\Projects\Ocr7siu\Ocr7siu\bin\ImageProcessor.dll
+C:\Users\Regulus\documents\visual studio 2017\Projects\Ocr7siu\Ocr7siu\bin\ImageProcessor.xml

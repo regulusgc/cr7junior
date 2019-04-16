@@ -43,6 +43,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ImageProcessor, Version=2.7.0.100, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ImageProcessor.2.7.0.100\lib\net452\ImageProcessor.dll</HintPath>
+    </Reference>
     <Reference Include="IronOcr, Version=4.4.0.21181, Culture=neutral, PublicKeyToken=5f366048dc436899, processorArchitecture=MSIL">
       <HintPath>..\packages\IronOcr.4.4.0\lib\net40\IronOcr.dll</HintPath>
     </Reference>
@@ -167,6 +170,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\MyFormUrlEncodedContent.cs" />
+    <Compile Include="Models\OCRResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -186,7 +191,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Image\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
