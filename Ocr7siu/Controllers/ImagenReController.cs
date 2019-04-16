@@ -30,7 +30,7 @@ namespace Ocr7siu.Controllers
         public static int nuevoconta = 1;
 
         const String Storage = "ponysalvaje";
-        const String key = "09fTcaVFwVD0KNBUPMW30x2wprzGCmOUYZfz84+9wY6uU9jHbOaW4jVA/Q6J6Yx207RCBwA4G6cJFt1BVHTCUg==";
+        const String key = "";
         public string tempora = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\temporal" + "\\";
         public object ViewBag { get; private set; }
 
@@ -288,7 +288,7 @@ namespace Ocr7siu.Controllers
 
 
                 MultipartFormDataContent form = new MultipartFormDataContent();
-                form.Add(new StringContent("69bcefec0e88957"), "apikey"); //Added api key in form data
+                form.Add(new StringContent("cambia el api"), "apikey"); //Added api key in form data
                 form.Add(new StringContent("spa"), "language");
 
 
