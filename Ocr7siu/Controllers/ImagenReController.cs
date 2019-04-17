@@ -28,6 +28,7 @@ namespace Ocr7siu.Controllers
     {
         public static int conta=1;
         public static int nuevoconta = 1;
+        public  String extension = "";
 
         const String Storage = "ponysalvaje";
         const String key = "";
@@ -48,34 +49,11 @@ namespace Ocr7siu.Controllers
         
 
         //devuelve un string del ocr7 cuando se le envia una base64
-        [HttpPost]
-        [Route("api/Serresiete")]
-        public String DevolverOCR7()
-        {
-
-
-            var httpRequest = HttpContext.Current.Request;
-            //Upload Image
-            var postedFile = httpRequest.Form["Image"];
-            String imagenconvertida = postedFile;
-
-            String convertida = imagenconvertida.Replace("data:image/png;base64,", String.Empty);
-
-            
-            String CR7 = Almacenar(conta.ToString(), convertida);
-            
-          
-            contadorin();
-
-
-
-            return CR7;
-
-        }
+       
         //Metodo que guarda el archivo y extrae el path para que se implemente el OCR
         public String Almacenar(String filename, String base64Image)
         {
-            string destinationImgPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\EscaneoFisicoo" + "\\" + filename + ".jpeg";
+            string destinationImgPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\EscaneoFisicoo" + "\\" + filename + extension;
             try
             {
                 Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\EscaneoFisicoo");
@@ -99,75 +77,14 @@ namespace Ocr7siu.Controllers
             return destinationImgPath;
         }
 
-        //Metodo OCR7
-        public String ElComandateCR7(String Imagen)
-        {
-            String Resultado ="";
-            AutoOcr OCR = new AutoOcr() { ReadBarCodes = false };
-            var Results = OCR.Read(Imagen);
-
-            Resultado = Results.Text;
-
-            return Resultado;
-        }
-
-
-
        
-
-
-
-
-
-        // crea el blob y haria el ocr pero nel
-        [HttpPost]
-        [Route("api/Autovr2")]
-        public String version2()
-        {
-            var Stocuenta = new CloudStorageAccount(new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(Storage, key), true);
-            var blobcliente = Stocuenta.CreateCloudBlobClient();
-            var container = blobcliente.GetContainerReference("micontendor");
-            container.CreateIfNotExists();
-            container.SetPermissions(new BlobContainerPermissions()
-            {
-                PublicAccess = BlobContainerPublicAccessType.Blob
-            });
-
-            String imageName = null;
-            imageName = conta.ToString() + ".png";
-
-            var httpRequest = HttpContext.Current.Request;
-            //Upload Image
-            var image = httpRequest.Files["Image"];
-            //Create custom filename
-             var pati = String.Format("Got image {0} of type {1} and size {2}",
-            image.FileName, image.ContentType, image.ContentLength);
-
-            string uniqueBlobName = string.Format("productimages/image_{0}",imageName
-            );
-            CloudBlockBlob blob = container.GetBlockBlobReference(uniqueBlobName);
-            blob.Properties.ContentType = image.ContentType;
-            blob.UploadFromStream(image.InputStream);
-
-
-
-            String cosa = "image_"+imageName;
-
-            String nueva = ElComandateCR7("https://ponysalvaje.blob.core.windows.net/micontendor/productimages/"+cosa);
-
-
-
-
-
-            return nueva;
-
-        }
+        
 
 
         public String recorte(String pati)
         {
             var balonBytes = File.ReadAllBytes(pati);
-            String Patricia = tempora + nuevoconta.ToString() + ".jpeg";
+            String Patricia = tempora + nuevoconta.ToString() + extension;
             using (var inStream = new MemoryStream(balonBytes))
             using (var imageFactory = new ImageFactory(false))
             {
@@ -183,7 +100,7 @@ namespace Ocr7siu.Controllers
         public String recorte2(String pati)
         {
             var balonBytes = File.ReadAllBytes(pati);
-            String Patricia = tempora + nuevoconta.ToString() + ".jpeg";
+            String Patricia = tempora + nuevoconta.ToString() + extension;
             using (var inStream = new MemoryStream(balonBytes))
             using (var imageFactory = new ImageFactory(false))
             {
@@ -199,7 +116,7 @@ namespace Ocr7siu.Controllers
         public String recorte3(String pati)
         {
             var balonBytes = File.ReadAllBytes(pati);
-            String Patricia = tempora + nuevoconta.ToString() + ".jpeg";
+            String Patricia = tempora + nuevoconta.ToString() + extension;
             using (var inStream = new MemoryStream(balonBytes))
             using (var imageFactory = new ImageFactory(false))
             {
@@ -215,7 +132,7 @@ namespace Ocr7siu.Controllers
         public String recorte4(String pati)
         {
             var balonBytes = File.ReadAllBytes(pati);
-            String Patricia = tempora + nuevoconta.ToString() + ".jpeg";
+            String Patricia = tempora + nuevoconta.ToString() + extension;
             using (var inStream = new MemoryStream(balonBytes))
             using (var imageFactory = new ImageFactory(false))
             {
@@ -237,15 +154,30 @@ namespace Ocr7siu.Controllers
 
         [HttpPost]
         [Route("api/prueba")]
-        public async System.Threading.Tasks.Task<string []> jaggerAsync()
+        public async System.Threading.Tasks.Task<string[]> jaggerAsync()
         {
             String solita = "";
             var httpRequest = HttpContext.Current.Request;
             //Upload Image
             var postedFile = httpRequest.Form["Image"];
-            String imagenconvertida = postedFile;
 
-            String convertida = imagenconvertida.Replace("data:image/jpeg;base64,", String.Empty);
+            
+            String imagenconvertida = postedFile;
+            String convertida = "";
+
+            if (imagenconvertida.Contains("jpeg"))
+            {
+                convertida = imagenconvertida.Replace("data:image/jpeg;base64,", String.Empty);
+                extension = ".jpeg";
+
+            }
+            else
+            {
+                convertida = imagenconvertida.Replace("data:image/png;base64,", String.Empty);
+                extension = ".png";
+            }
+
+
             String CR7 = Almacenar(conta.ToString(), convertida);
             String Estandar = recorte4(CR7);
             
@@ -288,14 +220,14 @@ namespace Ocr7siu.Controllers
 
 
                 MultipartFormDataContent form = new MultipartFormDataContent();
-                form.Add(new StringContent("cambia el api"), "apikey"); //Added api key in form data
+                form.Add(new StringContent("69bcefec0e88957"), "apikey"); //Added api key in form data
                 form.Add(new StringContent("spa"), "language");
 
 
                 if (string.IsNullOrEmpty(path) == false)
                 {
                     byte[] imageData = File.ReadAllBytes(path);
-                    form.Add(new ByteArrayContent(imageData, 0, imageData.Length), "image", "image.jpeg");
+                    form.Add(new ByteArrayContent(imageData, 0, imageData.Length), "image", "image"+extension);
                 }
 
 
@@ -325,7 +257,7 @@ namespace Ocr7siu.Controllers
             }
             catch (Exception exception)
             {
-
+                Console.Write("error");
             }
 
             return Resultado;
@@ -346,31 +278,7 @@ namespace Ocr7siu.Controllers
 
 
 
-
-        [HttpPost]
-        [Route("api/UploadImage")]
-        public String cosa()
-        {
-            string imageName = null;
-            var httpRequest = HttpContext.Current.Request;
-            //Upload Image
-            var postedFile = httpRequest.Files["Image"];
-            //Create custom filename
-            imageName = new String(Path.GetFileNameWithoutExtension(postedFile.FileName).Take(10).ToArray()).Replace(" ", "-");
-            imageName = imageName + DateTime.Now.ToString("yymmssfff") + Path.GetExtension(postedFile.FileName);
-            var filePath = HttpContext.Current.Server.MapPath("~/Image/" + imageName);
-            postedFile.SaveAs(filePath);
-
-
-            Image image = new Bitmap(filePath);
-            Image image2 = new Bitmap(filePath);
-            Image image3 = new Bitmap(filePath);
-
-
-            String soca = "0";
-
-            return soca;
-        }
+        
         
         }
 }
