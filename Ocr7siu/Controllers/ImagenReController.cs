@@ -33,6 +33,7 @@ namespace Ocr7siu.Controllers
         const String Storage = "ponysalvaje";
         const String key = "";
         public string tempora = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\temporal" + "\\";
+        public string borrar = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\temporal";
         public object ViewBag { get; private set; }
 
        
@@ -171,6 +172,10 @@ namespace Ocr7siu.Controllers
                 extension = ".jpeg";
 
             }
+            else if (imagenconvertida.Contains("jpg"))
+            {
+                extension=".jpg";
+            }
             else
             {
                 convertida = imagenconvertida.Replace("data:image/png;base64,", String.Empty);
@@ -191,19 +196,31 @@ namespace Ocr7siu.Controllers
             String[] paises = new String[3] { Nit,Serie,nomb };
             String[] almacenar = new String[paises.Length];
 
+            //for (int i = 0; i < paises.Length; i++)
+            //{
+            //    solita = await OcrrinAsync(paises[i]);
+            //    String con = solita.Replace("\r\n", String.Empty);
+            //    almacenar[i] = con;
+
+            //}
+
+
             for (int i = 0; i < paises.Length; i++)
             {
-                solita = await OcrrinAsync(paises[i]);
+                solita =  ElComandateCR7(paises[i]);
                 String con = solita.Replace("\r\n", String.Empty);
                 almacenar[i] = con;
-
             }
 
 
-           
+            System.IO.File.Delete(CR7);
+            //System.IO.File.Delete(Estandar);
+            //System.IO.File.Delete(Nit);
+            //System.IO.File.Delete(Serie);
+            System.IO.File.Delete(nomb);
 
 
-            
+
 
             return almacenar;
         }
@@ -267,18 +284,114 @@ namespace Ocr7siu.Controllers
 
 
 
+        public String ElComandateCR7(String Imagen)
+        {
+            String Resultado = "";
 
+            var Ocr = new AdvancedOcr()
+            {
+                CleanBackgroundNoise = true,
+                EnhanceContrast = true,
+                EnhanceResolution = true,
+                Language = IronOcr.Languages.Spanish.OcrLanguagePack,
+                Strategy = IronOcr.AdvancedOcr.OcrStrategy.Advanced,
+                ColorSpace = AdvancedOcr.OcrColorSpace.GrayScale,
+                DetectWhiteTextOnDarkBackgrounds = false,
+                InputImageType = AdvancedOcr.InputTypes.Document,
+                RotateAndStraighten = true,
+                ReadBarCodes = false,
+                ColorDepth = 4
+            };
 
+            //  AutoOcr OCR = new AutoOcr() { ReadBarCodes = false };
+            var Results = Ocr.Read(Imagen);
 
+            Resultado = Results.Text;
 
-
-
-
-
-
-
-
-        
-        
+            return Resultado;
         }
+
+
+
+
+
+        [HttpPost]
+        [Route("api/IronCr7")]
+        public String[] OCRironsito()
+        {
+            String solita = "";
+            var httpRequest = HttpContext.Current.Request;
+            //Upload Image
+            var postedFile = httpRequest.Form["Image"];
+
+
+            String imagenconvertida = postedFile;
+            String convertida = "";
+
+            if (imagenconvertida.Contains("jpeg"))
+            {
+                convertida = imagenconvertida.Replace("data:image/jpeg;base64,", String.Empty);
+                extension = ".jpeg";
+
+            }
+            else if (imagenconvertida.Contains("jpg"))
+            {
+                extension = ".jpg";
+            }
+            else
+            {
+                convertida = imagenconvertida.Replace("data:image/png;base64,", String.Empty);
+                extension = ".png";
+            }
+
+
+            String CR7 = Almacenar(conta.ToString(), convertida);
+            String Estandar = recorte4(CR7);
+
+            String Nit = recorte(Estandar);
+            String Serie = recorte2(Estandar);
+            String nomb = recorte3(Estandar);
+
+
+
+            contadorin();
+            String[] paises = new String[3] { Nit, Serie, nomb };
+            String[] almacenar = new String[paises.Length];
+
+           
+
+            for (int i = 0; i < paises.Length; i++)
+            {
+                solita = ElComandateCR7(paises[i]);
+                String con = solita.Replace("\r\n", String.Empty);
+                almacenar[i] = con;
+            }
+
+
+            //System.IO.File.Delete(CR7);
+
+            //string[] filePaths = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\temporal"+"\\");
+            //foreach (string filePath in filePaths)
+            //{
+            //    File.SetAttributes(filePath, FileAttributes.Normal);
+            //    File.Delete(filePath);
+
+            //}
+
+
+
+
+            return almacenar;
+        }
+
+
+
+
+
+
+
+
+
+
+    }
 }
