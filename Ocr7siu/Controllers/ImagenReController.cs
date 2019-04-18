@@ -94,7 +94,7 @@ namespace Ocr7siu.Controllers
             using (var imageFactory = new ImageFactory(false))
             {
                 var m = imageFactory.Load(inStream)
-             .Crop(new Rectangle(481, 112, 109, 50))
+             .Crop(new Rectangle(481, 112, 109, 52))
                .Save(Patricia);
 
             }
@@ -110,7 +110,7 @@ namespace Ocr7siu.Controllers
             using (var imageFactory = new ImageFactory(false))
             {
                 var m = imageFactory.Load(inStream)
-             .Crop(new Rectangle(227, 590, 98, 50))
+             .Crop(new Rectangle(221, 590, 124, 52))
                .Save(Patricia);
 
             }
@@ -126,7 +126,7 @@ namespace Ocr7siu.Controllers
             using (var imageFactory = new ImageFactory(false))
             {
                 var m = imageFactory.Load(inStream)
-             .Crop(new Rectangle(151, 76, 440, 50))
+             .Crop(new Rectangle(151, 76, 440, 52))
                .Save(Patricia);
 
             }
@@ -202,8 +202,14 @@ namespace Ocr7siu.Controllers
 
             for (int i = 0; i < paises.Length; i++)
             {
+<<<<<<< HEAD
                 solita = await MakeOCRrequest(paises[i]);
                 String con = solita.Replace("\r\n", String.Empty);
+=======
+                solita = await OcrrinAsync(paises[i]);
+                String con = solita.Replace("\r\n", String.Empty).Replace("!", String.Empty); ;
+                
+>>>>>>> fb18e5b3efeb4f1a0591aa291fc1f25ff36fbb7d
                 almacenar[i] = con;
 
             }
