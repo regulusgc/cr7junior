@@ -202,14 +202,14 @@ namespace Ocr7siu.Controllers
 
             for (int i = 0; i < paises.Length; i++)
             {
-<<<<<<< HEAD
+//<<<<<<< HEAD
                 solita = await MakeOCRrequest(paises[i]);
                 String con = solita.Replace("\r\n", String.Empty);
-=======
-                solita = await OcrrinAsync(paises[i]);
-                String con = solita.Replace("\r\n", String.Empty).Replace("!", String.Empty); ;
+//=======
+                //solita = await OcrrinAsync(paises[i]);
+                //String con = solita.Replace("\r\n", String.Empty).Replace("!", String.Empty); ;
                 
->>>>>>> fb18e5b3efeb4f1a0591aa291fc1f25ff36fbb7d
+//>>>>>>> fb18e5b3efeb4f1a0591aa291fc1f25ff36fbb7d
                 almacenar[i] = con;
 
             }
