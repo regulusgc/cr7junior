@@ -18,6 +18,10 @@ using System.IO.IsolatedStorage;
 using Ocr7siu.Models;
 using Newtonsoft.Json;
 using ImageProcessor;
+using OCRTODOPOWER;
+using System.Net.Http.Headers;
+using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
 
 namespace Ocr7siu.Controllers
 {
@@ -196,23 +200,22 @@ namespace Ocr7siu.Controllers
             String[] paises = new String[3] { Nit,Serie,nomb };
             String[] almacenar = new String[paises.Length];
 
-            //for (int i = 0; i < paises.Length; i++)
-            //{
-            //    solita = await OcrrinAsync(paises[i]);
-            //    String con = solita.Replace("\r\n", String.Empty);
-            //    almacenar[i] = con;
-
-            //}
-
-
             for (int i = 0; i < paises.Length; i++)
             {
-                solita =  ElComandateCR7(paises[i]);
+                solita = await MakeOCRrequest(paises[i]);
                 String con = solita.Replace("\r\n", String.Empty);
                 almacenar[i] = con;
+
             }
 
 
+            //for (int i = 0; i < paises.Length; i++)
+            //{
+            //    solita = await OcrrinAsync(paises[i]);
+            //    // String con = solita.Replace("\r\n", String.Empty);
+            //    almacenar[i] = solita;
+            //}
+            //   OcrrinAsync(paises[0]).Wait();
             //System.IO.File.Delete(CR7);
             //System.IO.File.Delete(Estandar);
             //System.IO.File.Delete(Nit);
@@ -284,109 +287,205 @@ namespace Ocr7siu.Controllers
 
 
 
-        public String ElComandateCR7(String Imagen)
-        {
-            String Resultado = "";
+        //public String ElComandateCR7(String Imagen)
+        //{
+        //    String Resultado = "";
 
-            var Ocr = new AdvancedOcr()
-            {
-                CleanBackgroundNoise = true,
-                EnhanceContrast = true,
-                EnhanceResolution = true,
-                Language = IronOcr.Languages.Spanish.OcrLanguagePack,
-                Strategy = IronOcr.AdvancedOcr.OcrStrategy.Advanced,
-                ColorSpace = AdvancedOcr.OcrColorSpace.GrayScale,
-                DetectWhiteTextOnDarkBackgrounds = false,
-                InputImageType = AdvancedOcr.InputTypes.Document,
-                RotateAndStraighten = true,
-                ReadBarCodes = false,
-                ColorDepth = 4
-            };
+        //    var Ocr = new AdvancedOcr()
+        //    {
+        //        CleanBackgroundNoise = true,
+        //        EnhanceContrast = true,
+        //        EnhanceResolution = true,
+        //        Language = IronOcr.Languages.Spanish.OcrLanguagePack,
+        //        Strategy = IronOcr.AdvancedOcr.OcrStrategy.Advanced,
+        //        ColorSpace = AdvancedOcr.OcrColorSpace.GrayScale,
+        //        DetectWhiteTextOnDarkBackgrounds = false,
+        //        InputImageType = AdvancedOcr.InputTypes.Document,
+        //        RotateAndStraighten = true,
+        //        ReadBarCodes = false,
+        //        ColorDepth = 4
+        //    };
 
-            //  AutoOcr OCR = new AutoOcr() { ReadBarCodes = false };
-            var Results = Ocr.Read(Imagen);
+        //    //  AutoOcr OCR = new AutoOcr() { ReadBarCodes = false };
+        //    var Results = Ocr.Read(Imagen);
 
-            Resultado = Results.Text;
+        //    Resultado = Results.Text;
 
-            return Resultado;
-        }
+        //    return Resultado;
+        //}
 
-
-
-
-
-        [HttpPost]
-        [Route("api/IronCr7")]
-        public String[] OCRironsito()
-        {
-            String solita = "";
-            var httpRequest = HttpContext.Current.Request;
-            //Upload Image
-            var postedFile = httpRequest.Form["Image"];
-
-
-            String imagenconvertida = postedFile;
-            String convertida = "";
-
-            if (imagenconvertida.Contains("jpeg"))
-            {
-                convertida = imagenconvertida.Replace("data:image/jpeg;base64,", String.Empty);
-                extension = ".jpeg";
-
-            }
-            else if (imagenconvertida.Contains("jpg"))
-            {
-                extension = ".jpg";
-            }
-            else
-            {
-                convertida = imagenconvertida.Replace("data:image/png;base64,", String.Empty);
-                extension = ".png";
-            }
-
-
-            String CR7 = Almacenar(conta.ToString(), convertida);
-            String Estandar = recorte4(CR7);
-
-            String Nit = recorte(Estandar);
-            String Serie = recorte2(Estandar);
-            String nomb = recorte3(Estandar);
+        ////ocr que no nos dejara tirados
+        //public String OCRAZURE(String path)
+        //{
+        //  return new OCR().HacerOCR(path);
+        //}
 
 
 
-            contadorin();
-            String[] paises = new String[3] { Nit, Serie, nomb };
-            String[] almacenar = new String[paises.Length];
+        //[HttpPost]
+        //[Route("api/IronCr7")]
+        //public String[] OCRironsito()
+        //{
+        //    String solita = "";
+        //    var httpRequest = HttpContext.Current.Request;
+        //    //Upload Image
+        //    var postedFile = httpRequest.Form["Image"];
+
+
+        //    String imagenconvertida = postedFile;
+        //    String convertida = "";
+
+        //    if (imagenconvertida.Contains("jpeg"))
+        //    {
+        //        convertida = imagenconvertida.Replace("data:image/jpeg;base64,", String.Empty);
+        //        extension = ".jpeg";
+
+        //    }
+        //    else if (imagenconvertida.Contains("jpg"))
+        //    {
+        //        extension = ".jpg";
+        //    }
+        //    else
+        //    {
+        //        convertida = imagenconvertida.Replace("data:image/png;base64,", String.Empty);
+        //        extension = ".png";
+        //    }
+
+
+        //    String CR7 = Almacenar(conta.ToString(), convertida);
+        //    String Estandar = recorte4(CR7);
+
+        //    String Nit = recorte(Estandar);
+        //    String Serie = recorte2(Estandar);
+        //    String nomb = recorte3(Estandar);
+
+
+
+        //    contadorin();
+        //    String[] paises = new String[3] { Nit, Serie, nomb };
+        //    String[] almacenar = new String[paises.Length];
 
            
 
-            for (int i = 0; i < paises.Length; i++)
+        //    for (int i = 0; i < paises.Length; i++)
+        //    {
+        //        solita = ElComandateCR7(paises[i]);
+        //        String con = solita.Replace("\r\n", String.Empty);
+        //        almacenar[i] = con;
+        //    }
+
+
+        //    //System.IO.File.Delete(CR7);
+
+        //    //string[] filePaths = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\temporal"+"\\");
+        //    //foreach (string filePath in filePaths)
+        //    //{
+        //    //    File.SetAttributes(filePath, FileAttributes.Normal);
+        //    //    File.Delete(filePath);
+
+        //    //}
+
+
+
+
+        //    return almacenar;
+        //}
+
+
+
+
+
+
+
+
+
+        public async System.Threading.Tasks.Task<string> MakeOCRrequest (string imageFilePath)
+        {
+            const string subscriptionKey = "2af84a9c8a9c4c45a8dada9fb0d48fa3";
+
+            const string uriBase =
+                "https://australiaeast.api.cognitive.microsoft.com/vision/v2.0/ocr";
+
+            string resultado = "";
+
+            try
             {
-                solita = ElComandateCR7(paises[i]);
-                String con = solita.Replace("\r\n", String.Empty);
-                almacenar[i] = con;
+                HttpClient client = new HttpClient();
+
+                // Request headers.
+                client.DefaultRequestHeaders.Add(
+                    "Ocp-Apim-Subscription-Key", subscriptionKey);
+
+
+                string requestParameters = "language=es&detectOrientation=true";
+
+                // se arma la url
+                string uri = uriBase + "?" + requestParameters;
+
+                HttpResponseMessage response;
+
+                // Read the contents of the specified local image
+                // into a byte array.
+                byte[] byteData = GetImageAsByteArray(imageFilePath);
+
+                // Add the byte array as an octet stream to the request body.
+                using (ByteArrayContent content = new ByteArrayContent(byteData))
+                {
+                    // This example uses the "application/octet-stream" content type.
+                    // The other content types you can use are "application/json"
+                    // and "multipart/form-data".
+                    content.Headers.ContentType =
+                        new MediaTypeHeaderValue("application/octet-stream");
+
+                    // Asynchronously call the REST API method.
+                    response = await client.PostAsync(uri, content);
+                }
+
+                // Asynchronously get the JSON response.
+                string contentString = await response.Content.ReadAsStringAsync();
+
+        
+                OcrAzureResults ocrResult = JsonConvert.DeserializeObject<OcrAzureResults>(contentString);//se coviente en un objeto del Tipo OcrAzureResults
+
+                 //se recorreo para obtener el texto
+                for (int i = 0; i < ocrResult.regions.Count(); i++)
+                {
+                   
+                    for (int j = 0; j < ocrResult.regions[i].lines.Count(); j++)
+                    {
+                        for (int k = 0; k < ocrResult.regions[i].lines[j].words.Count(); k++)
+                        {
+                            resultado += ocrResult.regions[i].lines[j].words[k].text+" ";
+                        }
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("\n" + e.Message);
             }
 
+            return resultado.Trim();//si hay espacios al final es mejor quitarlos
 
-            //System.IO.File.Delete(CR7);
-
-            //string[] filePaths = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\temporal"+"\\");
-            //foreach (string filePath in filePaths)
-            //{
-            //    File.SetAttributes(filePath, FileAttributes.Normal);
-            //    File.Delete(filePath);
-
-            //}
-
-
-
-
-            return almacenar;
         }
 
-
-
-
+        /// <summary>
+        /// Returns the contents of the specified file as a byte array.
+        /// </summary>
+        /// <param name="imageFilePath">The image file to read.</param>
+        /// <returns>The byte array of the image data.</returns>
+        private byte[] GetImageAsByteArray(string imageFilePath)
+        {
+            // Open a read-only file stream for the specified file.
+            using (FileStream fileStream =
+                new FileStream(imageFilePath, FileMode.Open, FileAccess.Read))
+            {
+                // Read the file's contents into a byte array.
+                BinaryReader binaryReader = new BinaryReader(fileStream);
+                return binaryReader.ReadBytes((int)fileStream.Length);
+            }
+        }
 
 
 
