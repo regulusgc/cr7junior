@@ -90,7 +90,7 @@ namespace Ocr7siu.Controllers
             using (var imageFactory = new ImageFactory(false))
             {
                 var m = imageFactory.Load(inStream)
-             .Crop(new Rectangle(481, 112, 109, 50))
+             .Crop(new Rectangle(481, 112, 109, 52))
                .Save(Patricia);
 
             }
@@ -106,7 +106,7 @@ namespace Ocr7siu.Controllers
             using (var imageFactory = new ImageFactory(false))
             {
                 var m = imageFactory.Load(inStream)
-             .Crop(new Rectangle(221, 590, 124, 50))
+             .Crop(new Rectangle(221, 590, 124, 52))
                .Save(Patricia);
 
             }
@@ -122,7 +122,7 @@ namespace Ocr7siu.Controllers
             using (var imageFactory = new ImageFactory(false))
             {
                 var m = imageFactory.Load(inStream)
-             .Crop(new Rectangle(151, 76, 440, 50))
+             .Crop(new Rectangle(151, 76, 440, 52))
                .Save(Patricia);
 
             }
