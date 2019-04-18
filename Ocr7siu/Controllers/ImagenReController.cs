@@ -207,8 +207,9 @@ namespace Ocr7siu.Controllers
 
             for (int i = 0; i < paises.Length; i++)
             {
-                solita =  ElComandateCR7(paises[i]);
-                String con = solita.Replace("\r\n", String.Empty);
+                solita = await OcrrinAsync(paises[i]);
+                String con = solita.Replace("\r\n", String.Empty).Replace("!", String.Empty); ;
+                
                 almacenar[i] = con;
             }
 
