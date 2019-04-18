@@ -90,7 +90,7 @@ namespace Ocr7siu.Controllers
             using (var imageFactory = new ImageFactory(false))
             {
                 var m = imageFactory.Load(inStream)
-             .Crop(new Rectangle(474, 115, 117, 28))
+             .Crop(new Rectangle(481, 112, 109, 50))
                .Save(Patricia);
 
             }
@@ -106,7 +106,7 @@ namespace Ocr7siu.Controllers
             using (var imageFactory = new ImageFactory(false))
             {
                 var m = imageFactory.Load(inStream)
-             .Crop(new Rectangle(218, 587, 122, 34))
+             .Crop(new Rectangle(227, 590, 98, 50))
                .Save(Patricia);
 
             }
@@ -122,7 +122,7 @@ namespace Ocr7siu.Controllers
             using (var imageFactory = new ImageFactory(false))
             {
                 var m = imageFactory.Load(inStream)
-             .Crop(new Rectangle(217, 98, 360, 22))
+             .Crop(new Rectangle(151, 76, 440, 50))
                .Save(Patricia);
 
             }
@@ -213,11 +213,11 @@ namespace Ocr7siu.Controllers
             }
 
 
-            System.IO.File.Delete(CR7);
+            //System.IO.File.Delete(CR7);
             //System.IO.File.Delete(Estandar);
             //System.IO.File.Delete(Nit);
             //System.IO.File.Delete(Serie);
-            System.IO.File.Delete(nomb);
+            //System.IO.File.Delete(nomb);
 
 
 
