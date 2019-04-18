@@ -110,7 +110,7 @@ namespace Ocr7siu.Controllers
             using (var imageFactory = new ImageFactory(false))
             {
                 var m = imageFactory.Load(inStream)
-             .Crop(new Rectangle(221, 590, 124, 52))
+             .Crop(new Rectangle(221, 570, 124, 80))//y590
                .Save(Patricia);
 
             }
