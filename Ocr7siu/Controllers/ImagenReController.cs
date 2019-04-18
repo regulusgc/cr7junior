@@ -28,7 +28,7 @@ namespace Ocr7siu.Controllers
     {
         public static int conta=1;
         public static int nuevoconta = 1;
-        public  String extension = "";
+        public  String extension = "sedefineluego";
 
         const String Storage = "ponysalvaje";
         const String key = "";
@@ -165,16 +165,16 @@ namespace Ocr7siu.Controllers
             
             String imagenconvertida = postedFile;
             String convertida = "";
-
-            if (imagenconvertida.Contains("jpeg"))
+            String[] splitextension = imagenconvertida.Split(',');
+            if (splitextension[0].Contains("jpeg"))
             {
                 convertida = imagenconvertida.Replace("data:image/jpeg;base64,", String.Empty);
                 extension = ".jpeg";
 
             }
-            else if (imagenconvertida.Contains("jpg"))
+            else if ((splitextension[0].Contains("jpg")))
             {
-                extension=".jpg";
+                extension = ".jpg";
             }
             else
             {
